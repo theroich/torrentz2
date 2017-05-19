@@ -1,9 +1,8 @@
 ## TORRENTZ2 API
 ### Install
-Download zip and decompress in node_modules folder
+
 ```
-cd torrentz2
-npm install
+npm install torrentz2
 ```
 
 ### Search magnet links 

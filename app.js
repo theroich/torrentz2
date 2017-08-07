@@ -17,7 +17,7 @@ exports.searchTorrentz2 = function(searchStr){
 
         var $ = cheerio.load(html);
         const values = _($('dl')).filter(tag => $($(tag).find('a[href]')).attr('href') && $($(tag).find('a[href]')).attr('href').indexOf('?') == -1)
-            .map(extractHtmlData).sortBy(magnetObj => parseInt(magnetObj.seeds)).reverse()
+            .map(extractHtmlData).filter(magnetObj => magnetObj.peers && magnetObj.seeds).sortBy(magnetObj => parseInt(magnetObj.seeds)).reverse()
             .value();
 
 
@@ -53,5 +53,4 @@ function getTrackerStr(){
     ];
     return '&tr='+_.join(_(trackers).map(encodeURIComponent).value(),'&tr=');
 }
-
 

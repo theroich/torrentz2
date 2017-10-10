@@ -11,7 +11,11 @@ const Q  = require('q');
 
 exports.searchTorrentz2 = function(searchStr){
     const deferred = Q.defer();
-    const option = {url: `https://torrentz2.eu/search?f=${searchStr}`};
+    const option = {url: `https://torrentz2.eu/search?f=${searchStr}`,
+                    headers:{
+                      'Access-Control-Allow-Origin':'*'
+                    }
+                  };
     request(option, function (err, resp, html) {
 
 
@@ -53,4 +57,3 @@ function getTrackerStr(){
     ];
     return '&tr='+_.join(_(trackers).map(encodeURIComponent).value(),'&tr=');
 }
-

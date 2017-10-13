@@ -18,6 +18,9 @@ exports.searchTorrentz2 = function(searchStr){
                   };
     request(option, function (err, resp, html) {
 
+      if (err){
+        deferred.reject(err);
+      }
 
         var $ = cheerio.load(html);
         const values = _($('dl')).filter(tag => $($(tag).find('a[href]')).attr('href') && $($(tag).find('a[href]')).attr('href').indexOf('?') == -1)

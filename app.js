@@ -11,9 +11,16 @@ const Q  = require('q');
 
 exports.searchTorrentz2 = function(searchStr){
     const deferred = Q.defer();
-    const option = {url: `https://torrentz2.eu/search?f=${searchStr}`};
+    const option = {url: `https://torrentz2.eu/search?f=${searchStr}`,
+                    headers:{
+                      'Access-Control-Allow-Origin':'*'
+                    }
+                  };
     request(option, function (err, resp, html) {
 
+      if (err){
+        deferred.reject(err);
+      }
 
         var $ = cheerio.load(html);
         const values = _($('dl')).filter(tag => $($(tag).find('a[href]')).attr('href') && $($(tag).find('a[href]')).attr('href').indexOf('?') == -1)
@@ -53,4 +60,3 @@ function getTrackerStr(){
     ];
     return '&tr='+_.join(_(trackers).map(encodeURIComponent).value(),'&tr=');
 }
-

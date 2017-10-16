@@ -20,6 +20,7 @@ exports.searchTorrentz2 = function(searchStr){
 
       if (err){
         deferred.reject(err);
+        return false;
       }
 
         var $ = cheerio.load(html);

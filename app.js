@@ -13,13 +13,15 @@ exports.searchTorrentz2 = function(searchStr){
     const deferred = Q.defer();
     const option = {url: `https://torrentz2.eu/search?f=${searchStr}`,
                     headers:{
-                      'Access-Control-Allow-Origin':'*'
+                      'Access-Control-Allow-Origin':'*',
+                      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
                     }
                   };
     request(option, function (err, resp, html) {
 
       if (err){
         deferred.reject(err);
+        return false;
       }
 
         var $ = cheerio.load(html);

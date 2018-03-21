@@ -3,37 +3,21 @@
  */
 
 
-const request = require('request');
+var request = require('request');
+var jar = request.jar();
 const cheerio = require('cheerio');
 const _ = require('lodash');
-
+var request = request.defaults({
+    jar: jar,
+    followAllRedirects: true
+  });
 const Q  = require('q');
-
 exports.searchTorrentz2 = function(searchStr){
     const deferred = Q.defer();
-    const option = {url: `https://torrentz2.eu/search?f=${searchStr}`};
-    request(option, function (err, resp, html) {
-
-
-        var $ = cheerio.load(html);
-        const values = _($('dl')).filter(tag => $($(tag).find('a[href]')).attr('href') && $($(tag).find('a[href]')).attr('href').indexOf('?') == -1)
-            .map(extractHtmlData).filter(magnetObj => magnetObj.peers && magnetObj.seeds).sortBy(magnetObj => parseInt(magnetObj.seeds)).reverse()
-            .value();
-
-
-        deferred.resolve(values);
-
-        function extractHtmlData(obj){
-            const hash = $($(obj).find('a[href]')).attr('href').substring(1);
-
-            const name =  $($(obj).find('a[href]')).text();
-            const size = $($(obj).find('dd span')[2]).text();
-            const peers = $($(obj).find('dd span')[3]).text();
-            const seeds = $($(obj).find('dd span')[4]).text();
-            const magnet = `magnet:?xt=urn:btih:${hash}&dn=${encodeURI(name)}${getTrackerStr()}`;
-            return {magnet,name,size,peers,seeds};
-
-        }
+    const option_q = {url: `https://tortorrentz.com/search?q=${searchStr}`};
+    request.get(option_q, function (err, resp, html) {
+        
+        deferred.resolve(parseHtmlResponse(html));
 
     });
     return deferred.promise;
@@ -54,3 +38,23 @@ function getTrackerStr(){
     return '&tr='+_.join(_(trackers).map(encodeURIComponent).value(),'&tr=');
 }
 
+function parseHtmlResponse(html){
+
+    var $ = cheerio.load(html);
+        const values = _($('dl')).filter(tag => $($(tag).find('a[href]')).attr('href') && $($(tag).find('a[href]')).attr('href').indexOf('?') == -1)
+            .map(extractHtmlData).filter(magnetObj => magnetObj.peers && magnetObj.seeds).sortBy(magnetObj => parseInt(magnetObj.seeds)).reverse()
+            .value();
+
+            function extractHtmlData(obj){
+                const hash = $($(obj).find('a[href]')).attr('href').substring(1);
+    
+                const name =  $($(obj).find('a[href]')).text();
+                const size = $($(obj).find('dd span')[2]).text();
+                const peers = $($(obj).find('dd span')[3]).text();
+                const seeds = $($(obj).find('dd span')[4]).text();
+                const magnet = `magnet:?xt=urn:btih:${hash}&dn=${encodeURI(name)}${getTrackerStr()}`;
+                return {magnet,name,size,peers,seeds};
+    
+            }
+        return values;
+}

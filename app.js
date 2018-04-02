@@ -16,8 +16,8 @@ exports.searchTorrentz2 = function(searchStr){
     const deferred = Q.defer();
     const option_q = {url: `https://tortorrentz.com/search?q=${searchStr}`};
     request.get(option_q, function (err, resp, html) {
-        
-        deferred.resolve(parseHtmlResponse(html));
+        if(err) deferred.reject(err);
+        else deferred.resolve(parseHtmlResponse(html));
 
     });
     return deferred.promise;

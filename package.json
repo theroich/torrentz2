@@ -22,8 +22,13 @@
   "license": "ISC",
   "dependencies": {
     "cheerio": "^0.22.0",
-    "lodash": "^4.17.4",
+    "lazy.js": "^0.5.1",
     "q": "^1.4.1",
+    "req-fast": "^0.2.17",
     "request": "^2.81.0"
+  },
+  "devDependencies": {
+    "lodash": "^4.17.4",
+    "benchmark": "^2.1.4"
   }
 }

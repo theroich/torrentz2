@@ -64,8 +64,8 @@ function parseHtmlResponse(html) {
 
     const name = $($(obj).find('a[href]')).text();
     const size = $($(obj).find('dd span')[2]).text();
-    const peers = $($(obj).find('dd span')[3]).text();
-    const seeds = $($(obj).find('dd span')[4]).text();
+    const peers = parseInt($($(obj).find('dd span')[3]).text());
+    const seeds = parseInt($($(obj).find('dd span')[4]).text());
     const magnet = `magnet:?xt=urn:btih:${hash}&dn=${encodeURI(
       name
     )}${getTrackerStr()}`;

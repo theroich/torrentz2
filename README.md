@@ -1,5 +1,5 @@
 ## TORRENTZ2 API
-Html scraper of [~~Torrentz2~~](http://torrentz2.eu) [Tortorrentz](http//tortorrentz.com). Lets find a list of magnets links by query string. Return ArrayJson as result.
+Html scraper of [Torrentz2](http://torrentz2.eu). Lets find a list of magnets links by query string. Return ArrayJson as result.
 
 ### Install
 

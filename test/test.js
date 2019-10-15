@@ -3,4 +3,4 @@
  */
 var torrentz = require('../app.js');
 
-torrentz.searchTorrentz2('Game of thrones s07e04').then(console.log);
+torrentz.searchTorrentz2('Ubuntu').then(console.log);

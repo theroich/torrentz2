@@ -2,59 +2,45 @@
  * Created by theroich on 18/5/17.
  */
 
-
-var request = require('request');
-var jar = request.jar();
-const cheerio = require('cheerio');
+const Parser = require('rss-parser');
 const _ = require('lodash');
-var request = request.defaults({
-    jar: jar,
-    followAllRedirects: true
-  });
-const Q  = require('q');
-exports.searchTorrentz2 = function(searchStr){
-    const deferred = Q.defer();
-    const option_q = {url: `https://tortorrentz.com/search?q=${searchStr}`};
-    request.get(option_q, function (err, resp, html) {
-        
-        deferred.resolve(parseHtmlResponse(html));
+const parser = new Parser();
 
+
+exports.searchTorrentz2 = async function(searchStr){
+    const feed = await parser.parseURL(`https://torrentz2.eu/feed?f=${searchStr}`);
+    
+   
+    const items = feed.items.map(item => {
+        //content: 'Size: 5109 MB Seeds: 2 Peers: 0 Hash: e22b06e6a75cb1d3d2e74713420a51cc3bb579f1',
+        const contents = item.content.split(" ");
+        const size = contents[1]+" "+contents[2];
+        const peers = contents[6];
+        const seeds = contents[4];
+        const hash = item.link.replace("https://torrentz2.eu/","")
+        const magnet = toMagnet(hash,item.title);
+        const name = item.title
+        
+        return {
+          magnet,name,size, seeds,peers
+        }
     });
-    return deferred.promise;
+    return items;
 };
 
 
 
-function getTrackerStr(){
+function toMagnet(hash, name){
 
     const trackers = [
-        'udp://tracker.coppersurfer.tk:6969/announce',
         'udp://tracker.leechers-paradise.org:6969/announce',
-        'udp://tracker.zer0day.to:1337/announce',
         'udp://explodie.org:6969/announce',
-        'udp://tracker1.wasabii.com.tw:6969/announce',
-        'http://173.254.204.71:1096/announce'
+        'udp://open.demonii.si:1337/announce',
+        'udp://denis.stalker.upeer.me:6969/announce',
+        'udp://tracker.coppersurfer.tk:6969/announce',
+        'udp://torrentclub.tech:6969/announce',
+        'udp://retracker.lanta-net.ru:2710/announce',
+        'udp://retracker.akado-ural.ru:80/announce',
     ];
-    return '&tr='+_.join(_(trackers).map(encodeURIComponent).value(),'&tr=');
-}
-
-function parseHtmlResponse(html){
-
-    var $ = cheerio.load(html);
-        const values = _($('dl')).filter(tag => $($(tag).find('a[href]')).attr('href') && $($(tag).find('a[href]')).attr('href').indexOf('?') == -1)
-            .map(extractHtmlData).filter(magnetObj => magnetObj.peers && magnetObj.seeds).sortBy(magnetObj => parseInt(magnetObj.seeds)).reverse()
-            .value();
-
-            function extractHtmlData(obj){
-                const hash = $($(obj).find('a[href]')).attr('href').substring(1);
-    
-                const name =  $($(obj).find('a[href]')).text();
-                const size = $($(obj).find('dd span')[2]).text();
-                const peers = $($(obj).find('dd span')[3]).text();
-                const seeds = $($(obj).find('dd span')[4]).text();
-                const magnet = `magnet:?xt=urn:btih:${hash}&dn=${encodeURI(name)}${getTrackerStr()}`;
-                return {magnet,name,size,peers,seeds};
-    
-            }
-        return values;
+    return `magnet:?xt=urn:btih:${hash}&dn=${encodeURI(name)}&tr=+${_.join(_(trackers).map(encodeURIComponent).value(),'&tr=')}`;
 }

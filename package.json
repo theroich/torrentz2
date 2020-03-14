@@ -21,6 +21,7 @@
   "author": "theroich",
   "license": "ISC",
   "dependencies": {
+    "cloudscraper": "^4.6.0",
     "lodash": "^4.17.15",
     "rss-parser": "^3.7.3"
   }

@@ -5,11 +5,20 @@
 const Parser = require('rss-parser');
 const _ = require('lodash');
 const parser = new Parser();
+const puppeteer = require('puppeteer');
+const cloudscraper = require('cloudscraper');
 
 
-exports.searchTorrentz2 = async function(searchStr){
-    const feed = await parser.parseURL(`https://torrentz2.eu/feed?f=${searchStr}`);
-    
+exports.searchTorrentz2 = async function(searchStr,options){
+    let feed;
+    const feedUrl = `https://torrentz2.eu/feed?f=${searchStr}`;
+    if(options && options.skipDDOS){
+        const feedStr = await cloudscraper.get(feedUrl);
+        feed =  await parser.parseString(feedStr);
+        
+    }else{
+        feed = await parser.parseURL(feedUrl);
+    }
    
     const items = feed.items.map(item => {
         //content: 'Size: 5109 MB Seeds: 2 Peers: 0 Hash: e22b06e6a75cb1d3d2e74713420a51cc3bb579f1',
@@ -27,6 +36,7 @@ exports.searchTorrentz2 = async function(searchStr){
     });
     return items;
 };
+
 
 
 

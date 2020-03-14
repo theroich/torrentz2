@@ -3,4 +3,8 @@
  */
 var torrentz = require('../app.js');
 
-torrentz.searchTorrentz2('Ubuntu').then(console.log);
+torrentz.searchTorrentz2('MicroHD',{skipDDOS:true}).then(datos => {
+
+    console.log(datos);
+    
+});

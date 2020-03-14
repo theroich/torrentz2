@@ -36,7 +36,7 @@ torrentz.searchTorrentz2('Ubuntu 15.04').then(console.log);
 ```
 ### Search (Cloudfare protection skip)
 ```javascript
-const torrentz = require('torrentz2',{skipDDOS:true});
-torrentz.searchTorrentz2('Ubuntu 15.04').then(console.log);
-```
+const torrentz = require('torrentz2');
+torrentz.searchTorrentz2('Ubuntu 15.04',{skipDDOS:true}).then(console.log);
+``` 
 

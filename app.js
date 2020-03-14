@@ -5,7 +5,6 @@
 const Parser = require('rss-parser');
 const _ = require('lodash');
 const parser = new Parser();
-const puppeteer = require('puppeteer');
 const cloudscraper = require('cloudscraper');
 
 

@@ -3,8 +3,5 @@
  */
 var torrentz = require('../app.js');
 
-torrentz.searchTorrentz2('MicroHD',{skipDDOS:true}).then(datos => {
+torrentz.searchPuppetter('microHD');
 
-    console.log(datos);
-    
-});

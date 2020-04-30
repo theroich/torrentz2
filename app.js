@@ -6,7 +6,6 @@ const Parser = require('rss-parser');
 const _ = require('lodash');
 const parser = new Parser();
 const cloudscraper = require('cloudscraper');
-const puppeteer = require('puppeteer');
 
 
 exports.searchTorrentz2 = async function(searchStr,options){
@@ -55,15 +54,3 @@ function toMagnet(hash, name){
     return `magnet:?xt=urn:btih:${hash}&dn=${encodeURI(name)}&tr=+${_.join(_(trackers).map(encodeURIComponent).value(),'&tr=')}`;
 }
 
-
-
-async function puppetterQuery(searchStr) {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(`https://torrentz2.eu/feed?f=${searchStr}`);
-    setTimeout(() => page.screenshot({path: 'example.png'}),10000);
-
-  
-}
-
-exports.searchPuppetter = puppetterQuery;

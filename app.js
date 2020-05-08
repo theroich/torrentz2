@@ -5,14 +5,14 @@
 const Parser = require('rss-parser');
 const _ = require('lodash');
 const parser = new Parser();
-const cloudscraper = require('cloudscraper');
-
+const cloudscraper = require('hooman');
+const got = require("hooman");
 
 exports.searchTorrentz2 = async function(searchStr,options){
     let feed;
     const feedUrl = `https://torrentz2.eu/feed?f=${searchStr}`;
     if(options && options.skipDDOS){
-        const feedStr = await cloudscraper.get(feedUrl);
+        const feedStr = await got(feedUrl);
         feed =  await parser.parseString(feedStr);
         
     }else{

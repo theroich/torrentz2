@@ -21,7 +21,8 @@
   "author": "theroich",
   "license": "ISC",
   "dependencies": {
-    "cloudscraper": "^4.6.0",
+    "got": "^11.1.2",
+    "hooman": "^1.1.0",
     "lodash": "^4.17.15",
     "puppeteer": "^3.0.2",
     "request": "^2.88.2",
